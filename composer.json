@@ -1,0 +1,31 @@
+{
+    "name": "padavvan/omnipay-alfabank",
+    "description": "Alfabank API",
+    "type": "library",
+    "keywords": [
+        "alfabank",
+        "rest",
+        "api",
+        "payment"
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "ext-json": "^1.5"
+    },
+    "require-dev": {
+        "omnipay/common": "3.0.x-dev",
+        "php-http/guzzle6-adapter": "^1.1"
+    },
+    "license": "MIT",
+    "authors": [{
+        "name": "Oleg Koltsov",
+        "email": "lil-oleg@ya.ru"
+    }],
+    "autoload": {
+        "psr-4": {
+          "Omnipay\\AlfaBank\\": "src/"
+        }
+      },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
