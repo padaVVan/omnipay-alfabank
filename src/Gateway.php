@@ -4,8 +4,9 @@ namespace Omnipay\AlfaBank;
 
 use Omnipay\AlfaBank\Message\AuthorizeRequest;
 use Omnipay\AlfaBank\Message\CaptureRequest;
-use Omnipay\AlfaBank\Message\FetchRequest;
+use Omnipay\AlfaBank\Message\PurchaseRequest;
 use Omnipay\AlfaBank\Message\RefundRequest;
+use Omnipay\AlfaBank\Message\StatusRequest;
 
 /**
  * Class Gateway
@@ -13,19 +14,18 @@ use Omnipay\AlfaBank\Message\RefundRequest;
  * @property string $password Пароль мерчанта
  * @package Omnipay/Alfabank
  * @method \Omnipay\Common\Message\NotificationInterface acceptNotification(array $options = [])
- * @method \Omnipay\Common\Message\RequestInterface completeAuthorize(array $options = array())
- * @method \Omnipay\Common\Message\RequestInterface purchase(array $options = array())
- * @method \Omnipay\Common\Message\RequestInterface completePurchase(array $options = array())
- * @method \Omnipay\Common\Message\RequestInterface void(array $options = array())
- * @method \Omnipay\Common\Message\RequestInterface createCard(array $options = array())
- * @method \Omnipay\Common\Message\RequestInterface updateCard(array $options = array())
- * @method \Omnipay\Common\Message\RequestInterface deleteCard(array $options = array())
+ * @method \Omnipay\Common\Message\RequestInterface void(array $options = [])
+ * @method \Omnipay\Common\Message\RequestInterface createCard(array $options = [])
+ * @method \Omnipay\Common\Message\RequestInterface updateCard(array $options = [])
+ * @method \Omnipay\Common\Message\RequestInterface deleteCard(array $options = [])
+ * @method \Omnipay\Common\Message\RequestInterface completeAuthorize(array $options = [])
+ * @method \Omnipay\Common\Message\RequestInterface completePurchase(array $options = [])
  */
 class Gateway extends \Omnipay\Common\AbstractGateway
 {
     /**
      * @param array $options
-     * @return \Omnipay\Common\Message\AbstractRequest|\Omnipay\Common\Message\RequestInterface
+     * @return AuthorizeRequest|\Omnipay\Common\Message\RequestInterface
      */
     public function authorize(array $options = [])
     {
@@ -34,7 +34,7 @@ class Gateway extends \Omnipay\Common\AbstractGateway
 
     /**
      * @param array $options
-     * @return \Omnipay\Common\Message\AbstractRequest|\Omnipay\Common\Message\RequestInterface
+     * @return CaptureRequest|\Omnipay\Common\Message\RequestInterface
      */
     public function capture(array $options = [])
     {
@@ -43,11 +43,25 @@ class Gateway extends \Omnipay\Common\AbstractGateway
 
     /**
      * @param array $options
+     * @return PurchaseRequest|\Omnipay\Common\Message\RequestInterface
+     */
+    public function purchase(array $options = [])
+    {
+        return $this->createRequest(PurchaseRequest::class, $options);
+    }
+
+    /**
+     * @param array $options
      * @return \Omnipay\Common\Message\AbstractRequest|\Omnipay\Common\Message\RequestInterface
      */
     public function fetchTransaction(array $options = [])
     {
-        return $this->createRequest(FetchRequest::class, $options);
+        return $this->createRequest(StatusRequest::class, $options);
+    }
+
+    public function status(array $options = [])
+    {
+        return $this->createRequest(StatusRequest::class, $options);
     }
 
     /**
@@ -86,5 +100,10 @@ class Gateway extends \Omnipay\Common\AbstractGateway
     public function setPassword(string $value): self
     {
         return $this->setParameter('password', $value);
+    }
+
+    public function __call($name, $arguments)
+    {
+        // TODO: Implement @method \Omnipay\Common\Message\RequestInterface completeAuthorize(array $options = array())
     }
 }

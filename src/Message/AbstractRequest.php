@@ -4,8 +4,7 @@ namespace Omnipay\AlfaBank\Message;
 
 /**
  * Class AbstractRequest
- *
- * @package shop\components\payments\paynet\message
+ * @package Omnipay\AlfaBank\Message
  */
 abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 {
@@ -24,35 +23,33 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     /**
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return [
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
+            'Content-Type' => 'application/x-www-form-urlencoded',
         ];
     }
 
     /**
      * @return bool
      */
-    protected function getEndpoint()
+    protected function getEndpoint(): string
     {
         return $this->getTestMode() ? $this->testEndpoint : $this->prodEndpoint;
     }
 
     /**
-     * @param string $service
      * @return string
      */
-    public function createUrlTo(string $service): string
+    public function getHttpMethod()
     {
-        return $this->getEndpoint() . '/' . $service;
+        return 'POST';
     }
 
     /**
      * @return array
      */
-    public function getAuthData()
+    public function getAuthData(): array
     {
         if (empty($this->getToken())) {
             return [
@@ -63,6 +60,33 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
         return ['token' => $this->getToken()];
     }
+
+    /**
+     * Send the request with specified data
+     *
+     * @param  array $data The data to send
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function sendData($data)
+    {
+        $httpResponse = $this->httpClient->request(
+            $this->getHttpMethod(),
+            $this->getEndpoint(),
+            $this->getHeaders(),
+            http_build_query($data, '', '&')
+        );
+        $contents = $httpResponse->getBody()->getContents();
+
+         return $this->createResponse($contents);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $fromContent
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    abstract public function createResponse($fromContent);
 
     /**
      * @param string $value
@@ -86,8 +110,33 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
      * @param string $value
      * @return AbstractRequest
      */
-    public function setOrderNumber(string $value)
+    public function setLanguage(string $value): self
     {
-        return $this->setParameter('orderNumber', $value);
+        return $this->setParameter('language', $value);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLanguage()
+    {
+        return $this->getParameter('language');
+    }
+
+    /**
+     * @param string $value
+     * @return self
+     */
+    public function setOrderId(string $value): self
+    {
+        return $this->setParameter('orderId', $value);
+    }
+
+    /**
+     *
+     */
+    public function getOrderId()
+    {
+        return $this->getParameter('orderId');
     }
 }

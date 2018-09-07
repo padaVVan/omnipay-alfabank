@@ -3,25 +3,26 @@
 namespace Omnipay\AlfaBank\Message;
 
 /**
- * Class AuthorizeRequest
+ * Class PurchaseRequest
  * @package Omnipay\AlfaBank\Message
  */
-class AuthorizeRequest extends RegisterRequest
+class PurchaseRequest extends RegisterRequest
 {
     /**
+     * @inheritdoc
      * @return string
      */
     public function getEndpoint(): string
     {
-        return parent::getEndpoint() . '/registerPreAuth.do';
+        return parent::getEndpoint() . '/register.do';
     }
 
     /**
      * @param string $contents
-     * @return AuthorizeResponse
+     * @return PurchaseResponse
      */
     public function createResponse($contents)
     {
-        return $this->response = new AuthorizeResponse($this, $contents);
+        return $this->response = new PurchaseResponse($this, $contents);
     }
 }

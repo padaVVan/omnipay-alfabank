@@ -3,8 +3,8 @@
 namespace Omnipay\AlfaBank\Message;
 
 /**
- * Class Response
- * @package shop\components\payments\paynet\message
+ * Class CaptureResponse
+ * @package Omnipay\AlfaBank\Message
  */
 class CaptureResponse extends AbstractResponse
 {
@@ -43,7 +43,7 @@ class CaptureResponse extends AbstractResponse
      */
     public function isCancelled()
     {
-        return (bool)$this->getCode();
+        return false;
     }
 
     /**

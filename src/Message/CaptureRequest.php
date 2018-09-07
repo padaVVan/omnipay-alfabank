@@ -4,47 +4,40 @@ namespace Omnipay\AlfaBank\Message;
 
 /**
  * Class CaptureRequest
- * @package shop\components\payments\paynet\message
+ * @package Omnipay\AlfaBank\Message
  */
 class CaptureRequest extends AbstractRequest
 {
     /**
-     * @var string
+     * @return string
      */
-    protected $service = 'deposit.do';
+    public function getEndpoint(): string
+    {
+        return parent::getEndpoint() . '/deposit.do';
+    }
+
+    /**
+     * @param string $contents
+     * @return CaptureResponse
+     */
+    public function createResponse($contents)
+    {
+        return $this->response = new CaptureResponse($this, $contents);
+    }
 
     /**
      * @return mixed
      */
     public function getData()
     {
+        $this->validate('amount', 'orderId');
+
         return array_merge(
             $this->getAuthData(),
             [
                 'amount' => $this->getAmountInteger(),
                 'orderId' => $this->getParameter('orderId'),
             ]
-        );
-    }
-
-    /**
-     * Send the request with specified data
-     *
-     * @param  mixed $data The data to send
-     * @return CaptureResponse
-     */
-    public function sendData($data)
-    {
-        $httpResponse = $this->httpClient->request(
-            'POST',
-            $this->createUrlTo($this->service),
-            $this->getHeaders(),
-            json_encode($data)
-        );
-
-        return $this->response = new CaptureResponse(
-            $this,
-            json_decode($httpResponse->getBody()->getContents(), true)
         );
     }
 

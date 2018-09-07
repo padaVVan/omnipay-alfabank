@@ -22,14 +22,24 @@ abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
      * Constructor
      *
      * @param RequestInterface $request the initiating request.
-     * @param mixed $data
+     * @param string $data JSON string
      */
     public function __construct(RequestInterface $request, $data)
     {
         parent::__construct($request, []);
 
         $this->request = $request;
-        $this->data = new ParameterBag($data);
+        $this->data = new ParameterBag(json_decode($data, true));
+    }
+
+    /**
+     * Get the response data.
+     *
+     * @return ParameterBag
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 
     /**
@@ -40,5 +50,15 @@ abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
     public function getMessage()
     {
         return $this->data->get('errorMessage');
+    }
+
+    /**
+     * Response code
+     *
+     * @return null|string A response code from the payment gateway
+     */
+    public function getCode()
+    {
+        return $this->data->get('ErrorCode');
     }
 }

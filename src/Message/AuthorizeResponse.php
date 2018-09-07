@@ -3,8 +3,8 @@
 namespace Omnipay\AlfaBank\Message;
 
 /**
- * Class Response
- * @package shop\components\payments\paynet\message
+ * Class AuthorizeResponse
+ * @package Omnipay\AlfaBank\Message
  */
 class AuthorizeResponse extends AbstractResponse
 {
@@ -14,7 +14,7 @@ class AuthorizeResponse extends AbstractResponse
      */
     public function isSuccessful(): bool
     {
-        return (int)$this->data->get('errorCode', -1) === 0;
+        return !$this->getCode();
     }
 
     /**
@@ -31,7 +31,7 @@ class AuthorizeResponse extends AbstractResponse
      *
      * @return boolean
      */
-    public function isRedirect()
+    public function isRedirect(): bool
     {
         return boolval($this->getRedirectUrl());
     }
@@ -43,17 +43,7 @@ class AuthorizeResponse extends AbstractResponse
      */
     public function isCancelled()
     {
-        return (bool)$this->getCode();
-    }
-
-    /**
-     * Response code
-     *
-     * @return null|string A response code from the payment gateway
-     */
-    public function getCode()
-    {
-        return (int)$this->data->get('errorCode');
+        return false;
     }
 
     /**
