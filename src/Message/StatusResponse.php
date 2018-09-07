@@ -2,15 +2,15 @@
 
 namespace Omnipay\AlfaBank\Message;
 
+use Omnipay\AlfaBank\StatusEnum;
+
 /**
  * Class StatusResponse
  * @package Omnipay\AlfaBank\Message
  */
 class StatusResponse extends AbstractResponse
 {
-    const STATUS_REVERSE = 3;
 
-    const STATUS_REFUND = 4;
 
     /**
      * @inheritdoc
@@ -30,7 +30,7 @@ class StatusResponse extends AbstractResponse
     {
         return in_array(
             $this->getOrderStatus(),
-            [self::STATUS_REVERSE, self::STATUS_REFUND]
+            [StatusEnum::REVERSED, StatusEnum::REFUNDED]
         );
     }
 
