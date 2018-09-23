@@ -27,6 +27,7 @@ class CaptureRequest extends AbstractRequest
 
     /**
      * @return mixed
+     * @throws \Omnipay\Common\Exception\InvalidRequestException
      */
     public function getData()
     {
@@ -39,22 +40,5 @@ class CaptureRequest extends AbstractRequest
                 'orderId' => $this->getParameter('orderId'),
             ]
         );
-    }
-
-    /**
-     * @param $value
-     * @return CaptureRequest
-     */
-    public function setOrderId($value)
-    {
-        return $this->setParameter('orderId', $value);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOrderId()
-    {
-        return $this->getParameter('orderId');
     }
 }
